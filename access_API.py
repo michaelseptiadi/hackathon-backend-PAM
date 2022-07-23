@@ -39,9 +39,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def get_data(account_number):
+@app.get("/")
+async def root():
+    return {"compute": "one code per bit"}
+
+@app.get("/data")
+async def get_data(account_number:str):
     response = requests.get(URL + account_number, headers=header)
     data = response.json()
     return data
-
-print(get_data('ACC20220723042126424'))
