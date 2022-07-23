@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import datetime
+import os
 
 
 pamjaya_auth_url = "https://apigw.withoracle.cloud/pamjaya/token"
@@ -42,7 +43,7 @@ header = {
 
 app = FastAPI(
     title="RIGAQI TEAM API",
-    description="Mario , Michael, Katon and I created this API to get the data from the RIGAQI team. (created by machine)",
+    description="Mario , Michael, Katon created this API to get the data from the RIGAQI team. (created by machine)",
     version="0.0.1",
     terms_of_service="http://canuseethemeta?fuckoff.com/terms/",
     contact={
@@ -66,6 +67,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def generate_report(json_data, report_data):
+    file_name = "report - " + json_data["account_number"] + "-" + datetime.datetime.now().strftime("%Y") + ".json"
+    
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    if file_name not in files:
+        with open(file_name, 'w') as outfile:
+            outfile.write(json.dumps(report_data))
+    elif file_name in files:
+        json_data = json.load(open(file_name))
+        json_data["data"].append(report_data["data"])
+        new_data = {
+            "account_number": json_data["account_number"],
+            "data": json_data["data"]
+        }
+        with open(file_name, 'w') as outfile:
+            outfile.write(json.dumps(new_data))
+
+
 @app.get("/")
 async def root():
     return {"compute": "one code per bit"}
@@ -82,6 +101,22 @@ async def payment(account_number:str, amount:int):
         json = json_data, 
         headers=header
     )
+    report_data = {
+        "account_number": json_data["account_number"],
+        "data" : [
+            {
+                "tahun" : datetime.datetime.now().strftime("%Y"),
+                "bulan" : datetime.datetime.now().strftime("%m"),
+                "tipe_transaksi" : "Pembayaran",
+                "jumlah_bayar" : amount,
+                "volume" : "3000 ML"
+            }
+        ]
+    }
+    generate_report(
+        json_data, 
+        report_data
+    )
     data = response.json()
     return [data]
 
@@ -95,6 +130,22 @@ async def charge(account_number:str, amount:int):
         URL_CHARGE,
         json = json_data,
         headers=header
+    )
+    report_data = {
+        "account_number": json_data["account_number"],
+        "data" : [
+            {
+                "tahun" : datetime.datetime.now().strftime("%Y"),
+                "bulan" : datetime.datetime.now().strftime("%m"),
+                "tipe_transaksi" : "Isi Saldo",
+                "jumlah_bayar" : amount,
+                "volume" : None
+            }
+        ]
+    }
+    generate_report(
+        json_data, 
+        report_data
     )
     data = response.json()
     return [data]
