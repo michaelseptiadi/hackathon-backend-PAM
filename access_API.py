@@ -32,7 +32,7 @@ def get_token(client_id, client_secret, scope, grant_type):
 URL_PAYMENT = "https://apigw.withoracle.cloud/pamjaya/payment/pay/"
 URL_CHARGE = "https://apigw.withoracle.cloud/pamjaya/payment/charge/"
 URL_BALANCE = "https://apigw.withoracle.cloud/pamjaya/payment/balance/"
-URL_BETA = "https://apigw.withoracle.cloud/pamjaya/beta/account/"
+URL_BETA = "https://apigw.withoracle.cloud/pamjaya/account/"
 
 header = {
     'Authorization': 'Bearer ' + get_token(
@@ -171,8 +171,8 @@ async def beta(account_number:str):
         URL_BETA + json_data["account_number"],
         headers=header
     )
-    data = response.json()
     if response.status_code == 200:
+        data = response.json()
         data["status"] = "unpaid"
         return [data]
     else:
@@ -184,7 +184,7 @@ async def report(account_number:str):
         "account_number": account_number
     }
     json_data = json.load(open('demo_data.json'))
-    if json_account_number["account_number"] == "6226086390":
+    if json_account_number["account_number"] == json_account_number["account_number"]:
         return json_data
 
 # @app.post("/record"):
