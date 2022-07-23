@@ -127,6 +127,15 @@ async def beta(account_number:str):
     else:
         return {"error": "account number not found"}
 
+@app.get("/report")
+async def report(account_number:str):
+    json_account_number = {
+        "account_number": account_number
+    }
+    json_data = json.load(open('demo_data.json'))
+    if json_account_number["account_number"] == "6226086390":
+        return json_data
+
 # @app.post("/record"):
 # async def create_record(record: **Record):
 #     pass
