@@ -75,7 +75,7 @@ def generate_report(json_data, report_data):
             outfile.write(json.dumps(report_data))
     elif file_name in files:
         json_data = json.load(open(file_name))
-        json_data["data"].append(report_data["data"])
+        json_data["data"].append(report_data["data"][0])
         new_data = {
             "account_number": json_data["account_number"],
             "data": json_data["data"]

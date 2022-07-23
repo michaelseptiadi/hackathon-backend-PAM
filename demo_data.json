@@ -3,15 +3,14 @@
         "account_number": "6226086390",
         "data" : [
             {"tahun":"2022","bulan":"Juni","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
-            {"tahun":"2022","bulan":"Juni","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
-            {"tahun":"2022","bulan":"Juni","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
-            {"tahun":"2022","bulan":"Juni","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
-            {"tahun":"2022","bulan":"Juni","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
-            {"tahun":"2022","bulan":"Juni","status":"Pembayaran","jumlah bayar":"Rp 120.000","volume":"3000L"},
+            {"tahun":"2022","bulan":"Juli","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
+            {"tahun":"2022","bulan":"Agustus","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
+            {"tahun":"2022","bulan":"September","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
+            {"tahun":"2022","bulan":"Oktober","status":"Isi Saldo","jumlah bayar":"Rp 120.000","volume":"3000L"},
+            {"tahun":"2022","bulan":"Desember","status":"Pembayaran","jumlah bayar":"Rp 120.000","volume":"3000L"},
             {"tahun":"2022","bulan":"Juni","status":"Pembayaran","jumlah bayar":"Rp 120.000","volume":"3000L"},
             {"tahun":"2022","bulan":"Juni","status":"Pembayaran","jumlah bayar":"Rp 120.000","volume":"3000L"},
             {"tahun":"2022","bulan":"Juni","status":"Pembayaran","jumlah bayar":"Rp 120.000","volume":"3000L"}
         ]
     }
 ]
-    
