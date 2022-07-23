@@ -2,7 +2,6 @@ import requests
 import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import datetime
 import os
 
@@ -45,7 +44,7 @@ app = FastAPI(
     title="RIGAQI TEAM API",
     description="Mario , Michael, Katon created this API to get the data from the RIGAQI team. (created by machine)",
     version="0.0.1",
-    terms_of_service="http://canuseethemeta?fuckoff.com/terms/",
+    terms_of_service="",
     contact={
         "name": "RIGAQI???",
         "url": "http://komarr007.github.io/RIGAQI",
@@ -183,9 +182,9 @@ async def report(account_number:str):
     json_account_number = {
         "account_number": account_number
     }
-    json_data = json.load(open('demo_data.json'))
+    json_data = json.load(open("report - " + json_account_number["account_number"] + "-" + datetime.datetime.now().strftime("%Y") + ".json"))
     if json_account_number["account_number"] == json_account_number["account_number"]:
-        return json_data
+        return [json_data]
 
 # @app.post("/record"):
 # async def create_record(record: **Record):
