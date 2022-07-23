@@ -184,7 +184,7 @@ async def report(account_number:str):
         "account_number": account_number
     }
     json_data = json.load(open('demo_data.json'))
-    if json_account_number["account_number"] == json_account_number["account_number"]:
+    if json_data[0]["account_number"] == json_account_number["account_number"]:
         return json_data
 
 # @app.post("/record"):
