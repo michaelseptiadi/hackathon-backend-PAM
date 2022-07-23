@@ -5,27 +5,38 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import datetime
 
+
 pamjaya_auth_url = "https://apigw.withoracle.cloud/pamjaya/token"
 client_id = "8d69ec5f0d6c4c72bb03632aaaf9c062"
 client_secret = "d8d33ddf-5337-44fc-8d0f-30e721e74a0e"
 scope = "https://A8BD01119B22473B93CBABF0046DE054.integration.ocp.oraclecloud.com:443urn:opc:resource:consumer::all"
 grant_type = "client_credentials"
 
-data = {
-    "grant_type": grant_type,
-    "client_id": client_id,
-    "client_secret": client_secret,
-    "scope": scope
-}
+def get_token(client_id, client_secret, scope, grant_type):
+    data = {
+        "grant_type": grant_type,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "scope": scope
+    }
 
-auth = requests.post(pamjaya_auth_url, data=data)
-auth_response_json = auth.json()
-auth_token = auth_response_json["access_token"]
+    auth = requests.post(
+        pamjaya_auth_url, 
+        data=data
+    )
+    auth_response_json = auth.json()
+    auth_token = auth_response_json["access_token"]
+    return auth_token
 
-URL = "https://apigw.withoracle.cloud/pamjaya/beta/account/"
+URL_PAYMENT = "https://apigw.withoracle.cloud/pamjaya/payment/pay/"
+URL_CHARGE = "https://apigw.withoracle.cloud/pamjaya/payment/charge/"
+URL_BALANCE = "https://apigw.withoracle.cloud/pamjaya/payment/balance/"
+URL_BETA = "https://apigw.withoracle.cloud/pamjaya/beta/account/"
 
 header = {
-    'Authorization': 'Bearer ' + auth_token,
+    'Authorization': 'Bearer ' + get_token(
+        client_id, client_secret, scope, grant_type
+    ),
     'accept': 'application/json'
 }
 
@@ -59,9 +70,56 @@ app.add_middleware(
 async def root():
     return {"compute": "one code per bit"}
 
-@app.get("/data")
-async def get_data(account_number:str):
-    response = requests.get(URL + account_number, headers=header)
+@app.post("/pay")
+async def payment(account_number:str, amount:int):
+    json_data = {
+        "account_number": account_number,
+        "amount": amount,
+        "payment_date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    response = requests.post(
+        URL_PAYMENT,
+        json = json_data, 
+        headers=header
+    )
+    data = response.json()
+    return [data]
+
+@app.post("/charge")
+async def charge(account_number:str, amount:int):
+    json_data = {
+        "account_number": account_number,
+        "amount": amount
+    }
+    response = requests.post(
+        URL_CHARGE,
+        json = json_data,
+        headers=header
+    )
+    data = response.json()
+    return [data]
+
+@app.get("/balance")
+async def balance(account_number:str):
+    json_data = {
+        "account_number": account_number
+    }
+    response = requests.get(
+        URL_BALANCE + json_data["account_number"],
+        headers=header
+    )
+    data = response.json()
+    return [data]
+
+@app.get("/beta")
+async def beta(account_number:str):
+    json_data = {
+        "account_number": account_number
+    }
+    response = requests.get(
+        URL_BETA + json_data["account_number"],
+        headers=header
+    )
     data = response.json()
     if response.status_code == 200:
         data["status"] = "unpaid"
